@@ -1,10 +1,10 @@
 import { GuildMember, TextChannel, PartialGuildMember } from "discord.js";
-import { prisma } from "../services/database";
+import { db } from "../services/database";
 import { t } from "../services/localization";
 import { createEmbed } from "../utils/embed";
 
 export async function handleGuildMemberRemove(member: GuildMember | PartialGuildMember) {
-    const guildConfig = await prisma.guild.findUnique({
+    const guildConfig = await db.guild.findUnique({
         where: { id: member.guild.id },
     });
 

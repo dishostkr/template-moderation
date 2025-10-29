@@ -3,7 +3,7 @@ import {
     SlashCommandBuilder,
     PermissionFlagsBits,
 } from "discord.js";
-import { prisma } from "../../services/database";
+import { db } from "../../services/database";
 import { t } from "../../services/localization";
 import { successEmbed, errorEmbed } from "../../utils/embed";
 
@@ -41,7 +41,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const messageId = interaction.options.getString("message_id", true);
     const emoji = interaction.options.getString("emoji", true);
 
-    const reactionRole = await prisma.reactionRole.findUnique({
+    const reactionRole = await db.reactionRole.findUnique({
         where: {
             messageId_emoji: {
                 messageId,
@@ -57,7 +57,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
     }
 
-    await prisma.reactionRole.delete({
+    await db.reactionRole.delete({
         where: {
             id: reactionRole.id,
         },

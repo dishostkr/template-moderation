@@ -5,7 +5,7 @@ import {
     TextChannel,
     Role,
 } from "discord.js";
-import { prisma } from "../../services/database";
+import { db } from "../../services/database";
 import { t } from "../../services/localization";
 import { successEmbed, errorEmbed } from "../../utils/embed";
 
@@ -52,7 +52,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const role = interaction.options.getRole("role") as Role | null;
     const message = interaction.options.getString("message");
 
-    await prisma.guild.upsert({
+    await db.guild.upsert({
         where: { id: interaction.guildId },
         update: {
             welcomeChannelId: channel.id,

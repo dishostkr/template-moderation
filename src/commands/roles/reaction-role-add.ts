@@ -5,7 +5,7 @@ import {
     Role,
     Message,
 } from "discord.js";
-import { prisma } from "../../services/database";
+import { db } from "../../services/database";
 import { t } from "../../services/localization";
 import { successEmbed, errorEmbed } from "../../utils/embed";
 
@@ -64,7 +64,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
 
     // Check if reaction role already exists
-    const existing = await prisma.reactionRole.findUnique({
+    const existing = await db.reactionRole.findUnique({
         where: {
             messageId_emoji: {
                 messageId,
@@ -81,7 +81,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
 
     // Add reaction role to database
-    await prisma.reactionRole.create({
+    await db.reactionRole.create({
         data: {
             guildId: interaction.guildId,
             messageId,

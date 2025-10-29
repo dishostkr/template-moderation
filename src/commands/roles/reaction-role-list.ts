@@ -3,7 +3,7 @@ import {
     SlashCommandBuilder,
     PermissionFlagsBits,
 } from "discord.js";
-import { prisma } from "../../services/database";
+import { db } from "../../services/database";
 import { t } from "../../services/localization";
 import { createEmbed } from "../../utils/embed";
 
@@ -22,9 +22,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
     }
 
-    const reactionRoles = await prisma.reactionRole.findMany({
+    const reactionRoles = await db.reactionRole.findMany({
         where: { guildId: interaction.guildId },
-        orderBy: { createdAt: "desc" },
     });
 
     const embed = createEmbed("info").setTitle(t("commands.reaction-role-list.title"));

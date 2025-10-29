@@ -50,7 +50,6 @@ cp .env.example .env
 ```env
 DISCORD_TOKEN=여기에_봇_토큰_붙여넣기
 DISCORD_CLIENT_ID=여기에_클라이언트_ID_붙여넣기
-DATABASE_URL="file:./dev.db"
 ```
 
 **클라이언트 ID 찾기:**
@@ -58,14 +57,7 @@ DATABASE_URL="file:./dev.db"
 - Discord Developer Portal → 왼쪽 메뉴 **"OAuth2 → General"**
 - **CLIENT ID** 복사
 
-## 5단계: 데이터베이스 초기화
-
-```bash
-npx prisma migrate dev --name init
-npx prisma generate
-```
-
-## 6단계: 봇 실행
+## 5단계: 봇 실행
 
 ### 개발 모드 (추천)
 
@@ -80,7 +72,7 @@ npm run build
 npm start
 ```
 
-## 7단계: 봇 테스트
+## 6단계: 봇 테스트
 
 Discord 서버에서:
 
@@ -120,14 +112,11 @@ Discord 서버에서:
 - 봇의 역할이 지급하려는 역할보다 위에 있는지 확인
 - 봇에게 "Manage Roles" 권한이 있는지 확인
 
-### 데이터베이스 오류
+### 데이터가 저장되지 않아요
 
-```bash
-rm -rf prisma/migrations
-rm dev.db
-npx prisma migrate dev --name init
-npx prisma generate
-```
+- `data/` 폴더가 존재하는지 확인
+- 폴더 권한을 확인하세요
+- 봇을 재시작해보세요
 
 ---
 

@@ -4,7 +4,7 @@ import {
     PermissionFlagsBits,
     GuildMember,
 } from "discord.js";
-import { prisma } from "../../services/database";
+import { db } from "../../services/database";
 import { t } from "../../services/localization";
 import { successEmbed, errorEmbed } from "../../utils/embed";
 
@@ -97,14 +97,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
 
         // Ensure guild record exists (avoid foreign key violations)
-        await prisma.guild.upsert({
+        await db.guild.upsert({
             where: { id: interaction.guildId },
             update: {},
             create: { id: interaction.guildId },
         });
 
         // Log to database
-        await prisma.moderationLog.create({
+        await db.moderationLog.create({
             data: {
                 guildId: interaction.guildId,
                 moderatorId: interaction.user.id,

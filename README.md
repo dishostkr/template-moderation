@@ -1,6 +1,6 @@
 # 🤖 Discord Moderation Bot Template
 
-디스코드 관리 봇 템플릿 - Discord.js v14, TypeScript, Prisma, SQLite 기반
+디스코드 관리 봇 템플릿 - Discord.js v14, TypeScript, JSON 기반
 
 > 디스호스트(DisHost) 유저를 위한 완전한 관리 봇 템플릿입니다.
 
@@ -31,8 +31,7 @@
 
 - **Discord.js v14** - 최신 디스코드 API
 - **TypeScript** - 타입 안정성
-- **Prisma** - 현대적인 ORM
-- **SQLite** - 경량 데이터베이스
+- **JSON** - 간단한 파일 기반 저장소
 - **한국어 Localization** - 완벽한 한글 지원
 
 ---
@@ -105,17 +104,9 @@ npm install
 ```env
 DISCORD_TOKEN=your_bot_token_here
 DISCORD_CLIENT_ID=your_client_id_here
-DATABASE_URL="file:./dev.db"
 ```
 
-### 4. 데이터베이스 초기화
-
-```bash
-npx prisma migrate dev --name init
-npx prisma generate
-```
-
-### 5. 봇 실행
+### 4. 봇 실행
 
 #### 개발 모드
 
@@ -180,9 +171,10 @@ npm start
 
 ```
 template-moderation/
-├── prisma/
-│   ├── schema.prisma          # 데이터베이스 스키마
-│   └── migrations/            # 마이그레이션 파일
+├── data/                      # JSON 데이터 저장소
+│   ├── guilds.json           # 서버 설정
+│   ├── reaction-roles.json   # 반응 역할
+│   └── moderation-logs.json  # 관리 로그
 ├── src/
 │   ├── commands/
 │   │   ├── welcome/           # 환영 시스템 명령어
@@ -204,7 +196,7 @@ template-moderation/
 │   │   ├── messageReactionAdd.ts
 │   │   └── messageReactionRemove.ts
 │   ├── services/
-│   │   ├── database.ts        # Prisma Client
+│   │   ├── database.ts        # JSON 데이터베이스
 │   │   └── localization.ts    # 한국어 지원
 │   ├── utils/
 │   │   └── embed.ts           # 임베드 헬퍼
@@ -253,7 +245,7 @@ template-moderation/
 
 ---
 
-## 🗄️ 데이터베이스 스키마
+## 🗄️ 데이터 구조
 
 ### Guild (서버 설정)
 
@@ -278,22 +270,7 @@ template-moderation/
 - 사유
 - 타임스탬프
 
----
-
-## 🔄 업데이트 & 마이그레이션
-
-### 데이터베이스 스키마 변경 시
-
-```bash
-npx prisma migrate dev --name your_migration_name
-npx prisma generate
-```
-
-### Prisma Studio로 데이터 확인
-
-```bash
-npx prisma studio
-```
+모든 데이터는 `data/` 폴더의 JSON 파일에 자동으로 저장됩니다.
 
 ---
 

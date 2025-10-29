@@ -1,5 +1,5 @@
 import { MessageReaction, User, PartialMessageReaction, PartialUser } from "discord.js";
-import { prisma } from "../services/database";
+import { db } from "../services/database";
 
 export async function handleMessageReactionAdd(
     reaction: MessageReaction | PartialMessageReaction,
@@ -24,7 +24,7 @@ export async function handleMessageReactionAdd(
     if (!emoji) return;
 
     // Find reaction role
-    const reactionRole = await prisma.reactionRole.findUnique({
+    const reactionRole = await db.reactionRole.findUnique({
         where: {
             messageId_emoji: {
                 messageId: reaction.message.id,

@@ -4,7 +4,7 @@ import {
     PermissionFlagsBits,
     TextChannel,
 } from "discord.js";
-import { prisma } from "../../services/database";
+import { db } from "../../services/database";
 import { t } from "../../services/localization";
 import { successEmbed, errorEmbed } from "../../utils/embed";
 
@@ -42,7 +42,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const channel = interaction.options.getChannel("channel", true) as TextChannel;
     const message = interaction.options.getString("message");
 
-    await prisma.guild.upsert({
+    await db.guild.upsert({
         where: { id: interaction.guildId },
         update: {
             leaveChannelId: channel.id,
