@@ -75,7 +75,6 @@
 ```env
 DISCORD_TOKEN=your_bot_token_here
 DISCORD_CLIENT_ID=your_client_id_here
-DATABASE_URL="file:./dev.db"
 ```
 
 ### 3. 봇 실행
