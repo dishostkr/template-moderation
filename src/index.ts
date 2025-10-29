@@ -1,4 +1,4 @@
-import { Client, Events } from "discord.js";
+import { Client, Events, GatewayIntentBits, Partials } from "discord.js";
 import { config } from "./config";
 import { commands } from "./commands";
 import { deployCommands } from "./deploy-commands";
@@ -6,10 +6,21 @@ import { startScheduledJobs } from "./scheduler";
 
 // Event handlers
 import { handleMessageCreate } from "./events/messageCreate";
+import { handleGuildMemberAdd } from "./events/guildMemberAdd";
+import { handleGuildMemberRemove } from "./events/guildMemberRemove";
+import { handleMessageReactionAdd } from "./events/messageReactionAdd";
+import { handleMessageReactionRemove } from "./events/messageReactionRemove";
 
 // 클라이언트 생성
 const client = new Client({
-    intents: ["Guilds", "GuildMessages", "DirectMessages", "GuildMembers", "GuildVoiceStates"],
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildMessageReactions,
+    ],
+    partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
 // 봇이 준비되었을 때의 이벤트 핸들러
@@ -58,6 +69,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
 // 이벤트 리스너
 client.on(Events.MessageCreate, handleMessageCreate);
+client.on(Events.GuildMemberAdd, handleGuildMemberAdd);
+client.on(Events.GuildMemberRemove, handleGuildMemberRemove);
+client.on(Events.MessageReactionAdd, handleMessageReactionAdd);
+client.on(Events.MessageReactionRemove, handleMessageReactionRemove);
+
 // 봇 로그인
 client.login(config.DISCORD_TOKEN).then(() => {
     console.log("봇이 시작되었습니다.");

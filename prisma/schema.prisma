@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Guild {
+  id                String   @id
+  welcomeChannelId  String?
+  welcomeMessage    String?  @default("Welcome {user}! You are the {memberCount}th member of {server}!")
+  leaveChannelId    String?
+  leaveMessage      String?  @default("{user} has left the server.")
+  autoRoleId        String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  reactionRoles     ReactionRole[]
+  moderationLogs    ModerationLog[]
+}
+
+model ReactionRole {
+  id          Int      @id @default(autoincrement())
+  guildId     String
+  messageId   String
+  channelId   String
+  emoji       String
+  roleId      String
+  createdAt   DateTime @default(now())
+  
+  guild       Guild    @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  
+  @@unique([messageId, emoji])
+  @@index([guildId])
+}
+
+model ModerationLog {
+  id          Int      @id @default(autoincrement())
+  guildId     String
+  moderatorId String
+  targetId    String
+  action      String   // "kick", "ban", "purge"
+  reason      String?
+  amount      Int?     // purge message count
+  createdAt   DateTime @default(now())
+  
+  guild       Guild    @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  
+  @@index([guildId])
+  @@index([createdAt])
+}

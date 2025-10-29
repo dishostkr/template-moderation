@@ -1,16 +1,31 @@
 {
-  "name": "discord-js-typescript-boilerplate",
-  "version": "0.0.1",
-  "description": "A simple boilerplate for creating Discord bots with TypeScript",
+  "name": "discord-moderation-bot",
+  "version": "1.0.0",
+  "description": "A complete Discord moderation bot template with welcome system, reaction roles, and moderation commands",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.json",
-    "start": "npm run build && node dist/index.js"
+    "start": "node ./scripts/ensure-db.js && npx prisma generate && npx prisma migrate deploy --preview-feature || true && npm run build && node dist/index.js",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio"
   },
+  "keywords": [
+    "discord",
+    "bot",
+    "moderation",
+    "typescript",
+    "prisma",
+    "discord.js"
+  ],
+  "author": "DisHost",
+  "license": "MIT",
   "dependencies": {
+    "@prisma/client": "^6.18.0",
     "discord.js": "^14.18.0",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "prisma": "^6.18.0"
   },
   "devDependencies": {
     "ts-node": "^10.9.2",

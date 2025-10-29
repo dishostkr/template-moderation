@@ -1,6 +1,13 @@
 /node_modules
 .env
 /dist
-/prisma/migrations
 .DS_Store
 *.tar
+
+# Prisma
+/prisma/migrations
+*.db
+*.db-journal
+
+# Generated files
+/src/generated

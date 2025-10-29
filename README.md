@@ -1,126 +1,339 @@
-# Discord.js TypeScript Boilerplate
+# 🤖 Discord Moderation Bot Template
 
-이 리포지토리는 Discord.js(v14)와 TypeScript로 만든 간단한 봇 템플릿입니다. 빠르게 봇을 시작하고 커맨드/이벤트 구조를 따르기 쉽게 구성되어 있습니다.
+디스코드 관리 봇 템플릿 - Discord.js v14, TypeScript, Prisma, SQLite 기반
 
-## 주요 기능
-- TypeScript 기반 구조
-- 명령어(commands)와 이벤트(events) 분리
-- 슬래시 커맨드 배포 스크립트(`src/deploy-commands.ts`)
-- 간단한 스케줄러 예시(`src/scheduler.ts`)
-- 환경 변수(.env) 사용 (`dotenv`)
+> 디스호스트(DisHost) 유저를 위한 완전한 관리 봇 템플릿입니다.
 
-## 요구사항
-- Node.js 18 이상 권장
-- npm
+## ✨ 주요 기능
 
-## 빠른 시작
+### 1️⃣ 환영 & 자동 역할 시스템
 
-1. 리포지토리 복제
+- ✅ 신규 멤버 환영 메시지 (커스터마이징 가능)
+- ✅ 자동 역할 지급
+- ✅ 퇴장 메시지
+- ✅ 변수 지원: `{user}`, `{username}`, `{server}`, `{memberCount}`
+
+### 2️⃣ 반응 역할 시스템
+
+- ✅ 이모지 클릭으로 역할 자동 지급/회수
+- ✅ 유니코드 & 커스텀 이모지 지원
+- ✅ 반응 역할 패널 자동 생성
+- ✅ 무제한 반응 역할 설정
+
+### 3️⃣ 기본 관리 기능
+
+- ✅ 메시지 일괄 삭제 (Purge)
+- ✅ 멤버 추방 (Kick)
+- ✅ 멤버 차단 (Ban)
+- ✅ 모든 관리 행동 자동 로깅
+
+### 4️⃣ 기술 스택
+
+- **Discord.js v14** - 최신 디스코드 API
+- **TypeScript** - 타입 안정성
+- **Prisma** - 현대적인 ORM
+- **SQLite** - 경량 데이터베이스
+- **한국어 Localization** - 완벽한 한글 지원
+
+---
+
+## 📋 명령어 목록
+
+### 환영 시스템
+
+| 명령어           | 설명                          | 권한      |
+| ---------------- | ----------------------------- | --------- |
+| `/welcome-setup` | 환영 메시지 및 자동 역할 설정 | 서버 관리 |
+| `/leave-setup`   | 퇴장 메시지 설정              | 서버 관리 |
+
+### 반응 역할
+
+| 명령어                  | 설명                    | 권한      |
+| ----------------------- | ----------------------- | --------- |
+| `/reaction-role-add`    | 메시지에 반응 역할 추가 | 역할 관리 |
+| `/reaction-role-remove` | 반응 역할 제거          | 역할 관리 |
+| `/reaction-role-list`   | 반응 역할 목록 조회     | 역할 관리 |
+| `/reaction-role-panel`  | 반응 역할 패널 생성     | 역할 관리 |
+
+### 관리 기능
+
+| 명령어                | 설명                     | 권한        |
+| --------------------- | ------------------------ | ----------- |
+| `/purge [개수]`       | 메시지 일괄 삭제 (1-100) | 메시지 관리 |
+| `/kick [유저] [사유]` | 멤버 추방                | 멤버 추방   |
+| `/ban [유저] [사유]`  | 멤버 차단                | 멤버 차단   |
+
+---
+
+## 🚀 빠른 시작
+
+### 1. 저장소 복제
 
 ```bash
-git clone <your-repo-url>
-cd template-djs-boilerplate
+git clone https://github.com/dishostkr/template-moderation.git
+cd template-moderation
 ```
 
-2. 의존성 설치
+### 2. 의존성 설치
 
 ```bash
 npm install
 ```
 
-3. 환경 변수 설정
+### 3. 환경 변수 설정
 
-프로젝트 루트에 `.env` 파일을 만들고 다음 값을 채우세요:
+`.env` 파일을 열어 다음 값을 설정하세요:
 
+```env
+DISCORD_TOKEN=your_bot_token_here
+DISCORD_CLIENT_ID=your_client_id_here
+DATABASE_URL="file:./dev.db"
 ```
-DISCORD_TOKEN=your_bot_token
-DISCORD_CLIENT_ID=your_client_id
+
+### 4. 데이터베이스 초기화
+
+```bash
+npx prisma migrate dev --name init
+npx prisma generate
 ```
 
-4. 개발 모드로 실행
+### 5. 봇 실행
+
+#### 개발 모드
 
 ```bash
 npm run dev
 ```
 
-5. 빌드 및 시작 (프로덕션)
+#### 프로덕션 모드
 
 ```bash
 npm run build
 npm start
 ```
 
-> package.json에 정의된 스크립트:
+---
 
-- `dev` : `tsx watch src/index.ts` (개발 중 빠른 재시작)
-- `build`: `tsc -p tsconfig.json` (TypeScript 컴파일)
-- `start`: `npm run build && node dist/index.js` (빌드 후 실행)
+## 🔧 디스코드 봇 설정
 
-## 환경 변수
-`src/config.ts`에서 사용되는 환경 변수는 다음과 같습니다:
+### 1. Discord Developer Portal 설정
 
-- `DISCORD_TOKEN` - 봇 토큰
-- `DISCORD_CLIENT_ID` - 애플리케이션(클라이언트) ID
+1. [Discord Developer Portal](https://discord.com/developers/applications) 접속
+2. **New Application** 클릭
+3. **Bot** 탭에서 봇 생성
+4. **Token** 복사 → `.env`의 `DISCORD_TOKEN`에 입력
+5. **OAuth2 → General**에서 **Client ID** 복사 → `.env`의 `DISCORD_CLIENT_ID`에 입력
 
-필수 변수들이 설정되어 있지 않으면 실행 시 에러가 발생합니다.
+### 2. 필수 봇 권한 설정
 
-## 프로젝트 구조
+**OAuth2 → URL Generator**에서 다음 권한 선택:
+
+#### Scopes
+
+- ✅ `bot`
+- ✅ `applications.commands`
+
+#### Bot Permissions
+
+- ✅ Manage Roles
+- ✅ Kick Members
+- ✅ Ban Members
+- ✅ Manage Messages
+- ✅ Send Messages
+- ✅ Embed Links
+- ✅ Read Message History
+- ✅ Add Reactions
+- ✅ Use External Emojis
+
+### 3. 필수 인텐트 활성화
+
+**Bot** 탭에서 다음 인텐트를 활성화하세요:
+
+- ✅ **Server Members Intent**
+- ✅ **Message Content Intent** (선택사항)
+
+### 4. 봇 초대
+
+생성된 URL로 봇을 서버에 초대하세요.
+
+---
+
+## 📂 프로젝트 구조
 
 ```
-src/
-  config.ts           # dotenv 로 환경변수 로드 및 검증
-  deploy-commands.ts  # 슬래시 커맨드(등록) 스크립트 예시
-  index.ts            # 엔트리 포인트
-  scheduler.ts        # 스케줄 예시
-  commands/           # 커맨드 정의 폴더
-    ping.ts
-    index.ts          # 커맨드 로더
-  events/             # 이벤트 핸들러
-    messageCreate.ts
+template-moderation/
+├── prisma/
+│   ├── schema.prisma          # 데이터베이스 스키마
+│   └── migrations/            # 마이그레이션 파일
+├── src/
+│   ├── commands/
+│   │   ├── welcome/           # 환영 시스템 명령어
+│   │   │   ├── welcome-setup.ts
+│   │   │   └── leave-setup.ts
+│   │   ├── roles/             # 반응 역할 명령어
+│   │   │   ├── reaction-role-add.ts
+│   │   │   ├── reaction-role-remove.ts
+│   │   │   ├── reaction-role-list.ts
+│   │   │   └── reaction-role-panel.ts
+│   │   ├── moderation/        # 관리 명령어
+│   │   │   ├── purge.ts
+│   │   │   ├── kick.ts
+│   │   │   └── ban.ts
+│   │   └── index.ts
+│   ├── events/                # 이벤트 핸들러
+│   │   ├── guildMemberAdd.ts
+│   │   ├── guildMemberRemove.ts
+│   │   ├── messageReactionAdd.ts
+│   │   └── messageReactionRemove.ts
+│   ├── services/
+│   │   ├── database.ts        # Prisma Client
+│   │   └── localization.ts    # 한국어 지원
+│   ├── utils/
+│   │   └── embed.ts           # 임베드 헬퍼
+│   ├── locales/
+│   │   └── ko.json            # 한국어 번역
+│   ├── config.ts              # 환경 변수
+│   ├── index.ts               # 엔트리 포인트
+│   └── deploy-commands.ts     # 명령어 배포
+├── .env                       # 환경 변수
+├── package.json
+└── tsconfig.json
 ```
 
-새 커맨드나 이벤트를 추가할 때는 기존 구조를 참고해 `commands`/`events`에 파일을 추가하면 됩니다.
+---
 
-## 슬래시 커맨드 배포
+## 💡 사용 예시
 
-개발 시 TypeScript 파일을 직접 실행하려면 `tsx`를 사용합니다:
+### 환영 시스템 설정
+
+```
+/welcome-setup channel:#환영 role:@멤버 message:환영합니다 {user}님! {server}의 {memberCount}번째 멤버입니다!
+```
+
+### 반응 역할 설정
+
+1. 패널 생성:
+
+```
+/reaction-role-panel title:역할 선택 description:아래 이모지를 클릭하여 역할을 받으세요!
+```
+
+2. 역할 추가:
+
+```
+/reaction-role-add message_id:1234567890 emoji:🎮 role:@게이머
+/reaction-role-add message_id:1234567890 emoji:🎨 role:@아티스트
+```
+
+### 관리 기능
+
+```
+/purge amount:50
+/kick user:@유저 reason:스팸
+/ban user:@유저 reason:악성 행동 delete_days:7
+```
+
+---
+
+## 🗄️ 데이터베이스 스키마
+
+### Guild (서버 설정)
+
+- 환영 채널 ID
+- 환영 메시지
+- 퇴장 채널 ID
+- 퇴장 메시지
+- 자동 역할 ID
+
+### ReactionRole (반응 역할)
+
+- 메시지 ID
+- 이모지
+- 역할 ID
+- 채널 ID
+
+### ModerationLog (관리 로그)
+
+- 관리자 ID
+- 대상 유저 ID
+- 행동 종류 (kick/ban/purge)
+- 사유
+- 타임스탬프
+
+---
+
+## 🔄 업데이트 & 마이그레이션
+
+### 데이터베이스 스키마 변경 시
 
 ```bash
-npx tsx src/deploy-commands.ts
+npx prisma migrate dev --name your_migration_name
+npx prisma generate
 ```
 
-프로덕션 환경에서는 먼저 빌드한 뒤 dist 파일을 실행하세요:
+### Prisma Studio로 데이터 확인
+
+```bash
+npx prisma studio
+```
+
+---
+
+## 🛠️ 개발 가이드
+
+### 새 명령어 추가
+
+1. `src/commands/` 하위에 파일 생성
+2. `src/commands/index.ts`에 import 및 export 추가
+3. `src/locales/ko.json`에 번역 추가
+
+### 새 이벤트 추가
+
+1. `src/events/` 하위에 핸들러 생성
+2. `src/index.ts`에서 이벤트 등록
+
+---
+
+## 📦 배포
+
+### 디스호스트(DisHost) 배포
+
+1. 저장소를 GitHub에 푸시
+2. 디스호스트 패널에서 봇 생성
+3. 환경 변수 설정
+4. 자동 배포
+
+### 일반 서버 배포
 
 ```bash
 npm run build
-node dist/deploy-commands.js
+node dist/index.js
 ```
 
-> 배포 스크립트는 Discord 애플리케이션에 커맨드를 등록합니다. GUILD 단위 배포/전역 배포 등 스크립트 내용을 확인해 필요에 맞게 조정하세요.
+---
 
-## 명령어·이벤트 추가 가이드
+## 📄 라이선스
 
-1. `src/commands` 폴더에 새 커맨드 파일을 추가합니다. 기존 `ping.ts`를 참고하세요.
-2. `src/commands/index.ts`에서 새 커맨드를 내보내도록 추가합니다.
+MIT License - 자유롭게 사용, 수정, 배포 가능합니다.
 
-## 출처(Attribution)
+---
 
-이 템플릿을 기반으로 한 프로젝트는 원저작자 표기(출처)를 남기면 됩니다. 예시 문구:
+## 🙏 출처 표기
 
-```
-This project is based on dishostkr/template-djs-boilerplate (https://github.com/dishostkr/template-djs-boilerplate)
-```
-
-또는 한글 문구로:
+이 템플릿을 사용한 프로젝트는 다음과 같이 출처를 표기해주세요:
 
 ```
-이 프로젝트는 dishostkr/template-djs-boilerplate를 기반으로 합니다 (https://github.com/dishostkr/template-djs-boilerplate)
+이 프로젝트는 dishostkr/template-moderation을 기반으로 합니다.
+https://github.com/dishostkr/template-moderation
 ```
 
-출처 표기를 하려면 README, 프로젝트 홈페이지, 혹은 배포 패키지의 적절한 위치에 위 문구를 포함시키면 됩니다.
+---
 
-## 라이선스
+## 📞 지원
 
-이 프로젝트는 MIT 라이선스 하에 배포됩니다. 자세한 내용은 리포지토리 루트의 `LICENSE` 파일을 확인하세요.
+- [디스호스트 공식 웹사이트](https://dishost.kr)
+- [디스호스트 디스코드](https://discord.gg/dishost)
 
-요약: 이 템플릿을 사용한 프로젝트는 원저작자 표기(출처)를 남기면 됩니다(MIT의 저작권 고지 유지).
+---
+
+Made with ❤️ by [DisHost](https://dishost.kr)
